@@ -1,3 +1,61 @@
-# apps/prometheus/values.yaml
 serviceMonitors:
   enabled: true
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector:
+      matchNames:
+        - argocd
+        - monitoring
+    livenessProbe: null
+    readinessProbe: null
+    retention: 24h
+    resources:
+      requests:
+        memory: 300Mi
+        cpu: 200m
+      limits:
+        memory: 500Mi
+        cpu: 300m
+
+nodeExporter:
+  enabled: true
+  livenessProbe: null
+  readinessProbe: null
+  resources:
+    requests:
+      memory: 30Mi
+      cpu: 30m
+    limits:
+      memory: 60Mi
+      cpu: 60m
+
+kubeStateMetrics:
+  resources:
+    requests:
+      memory: 100Mi
+      cpu: 100m
+    limits:
+      memory: 200Mi
+      cpu: 200m
+
+grafana:
+  resources:
+    requests:
+      memory: 200Mi
+      cpu: 100m
+    limits:
+      memory: 400Mi
+      cpu: 200m
+
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests:
+        memory: 200Mi
+        cpu: 100m
+      limits:
+        memory: 400Mi
+        cpu: 200m
