@@ -1,0 +1,26 @@
+spec:
+  template:
+    spec:
+      volumes:
+        - name: helm-bin
+          emptyDir: {}
+      initContainers:
+        - name: download-helm
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              wget https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz -O /tmp/helm.tar.gz && \
+              tar -xzvf /tmp/helm.tar.gz -C /tmp && \
+              cp /tmp/linux-amd64/helm /helm-bin/helm && \
+              chmod +x /helm-bin/helm
+          volumeMounts:
+            - name: helm-bin
+              mountPath: /helm-bin
+      containers:
+        - name: argocd-repo-server
+          volumeMounts:
+            - name: helm-bin
+              mountPath: /usr/local/bin/helm
+              subPath: helm
